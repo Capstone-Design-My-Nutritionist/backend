@@ -17,9 +17,14 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/public/**").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html"
+                        ).permitAll() // Swagger 관련 경로 허용
+                        .requestMatchers("/api/public/**").permitAll() //공개 API
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN") // 관리자 API
+                        .anyRequest().authenticated() // 나머지는 인증 필요
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 

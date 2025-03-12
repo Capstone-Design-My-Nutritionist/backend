@@ -19,3 +19,13 @@ server:
       charset: UTF-8
       enabled: true
 
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    groups-order: DESC
+    doc-expansion: list
+    tags-sorter: alpha
+    operationsSorter: method
+    disable-swagger-default-url: true
+    display-request-duration: true
