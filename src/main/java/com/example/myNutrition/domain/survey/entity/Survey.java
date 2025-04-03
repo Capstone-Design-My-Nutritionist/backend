@@ -5,6 +5,7 @@ import com.example.myNutrition.domain.survey.enums.singular.*;
 import com.example.myNutrition.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,6 +31,7 @@ public class Survey {
     private boolean hasDiagnosedDisease;
     private boolean hasFamilyHistory;
     private boolean hasAllergy;
+
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -77,4 +79,43 @@ public class Survey {
 
     @OneToOne
     private User user;
+
+    @Builder
+    public Survey(
+            int age,
+            int height,
+            int weight,
+            boolean takingMedication,
+            boolean takingSupplements,
+            boolean hasDiagnosedDisease,
+            boolean hasFamilyHistory,
+            boolean hasAllergy,
+            Gender gender,
+            SleepTime sleepTime,
+            ExerciseFrequency exerciseFrequency,
+            Integer mealCount,
+            VegetableFruitIntake vegetableFruitIntake,
+            WaterIntake waterIntake,
+            Drinking drinking,
+            Smoking smoking,
+            User user
+    ) {
+        this.age = age;
+        this.height = height;
+        this.weight = weight;
+        this.takingMedication = takingMedication;
+        this.takingSupplements = takingSupplements;
+        this.hasDiagnosedDisease = hasDiagnosedDisease;
+        this.hasFamilyHistory = hasFamilyHistory;
+        this.hasAllergy = hasAllergy;
+        this.gender = gender;
+        this.sleepTime = sleepTime;
+        this.exerciseFrequency = exerciseFrequency;
+        this.mealCount = mealCount;
+        this.vegetableFruitIntake = vegetableFruitIntake;
+        this.waterIntake = waterIntake;
+        this.drinking = drinking;
+        this.smoking = smoking;
+        this.user = user;
+    }
 }
