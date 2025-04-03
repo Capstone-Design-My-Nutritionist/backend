@@ -38,6 +38,14 @@ public class UserService {
         log.info("[signUpUser] SIGN UP SUCCESS!! : {}", user.getEmail());
     }
 
+    public boolean isEmailAvailable(String email) {
+        return !userRepository.existsByEmail(email);
+    }
+
+    public boolean isNicknameAvailable(String nickname) {
+        return !userRepository.existsByNickname(nickname);
+    }
+
     // todo : 정책적으로 보안 위반 사항 확인 -> 에러 메세지를 통해서 유추 금지
     private void validateUserCreateRequest(UserCreateRequestDto userCreateRequestDto) {
         if (userRepository.findByEmail(userCreateRequestDto.getEmail()).isPresent())

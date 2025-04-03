@@ -26,7 +26,7 @@ public class UserEntity extends BaseTimeEntity {
     private String password;
 
     @NotBlank
-    @Column(nullable = false, unique = false)
+    @Column(nullable = false, unique = true)
     private String nickname;
 
     @Enumerated(EnumType.STRING) // Enum을 String 형태로 저장
