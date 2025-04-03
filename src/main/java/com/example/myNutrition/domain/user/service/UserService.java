@@ -9,10 +9,7 @@ import com.example.myNutrition.domain.user.dto.PasswordUpdateRequestDto;
 import com.example.myNutrition.domain.user.dto.UserCreateRequestDto;
 import com.example.myNutrition.domain.user.entity.User;
 import com.example.myNutrition.domain.user.entity.UserRole;
-import com.example.myNutrition.domain.user.exception.EmailAlreadyExistsException;
-import com.example.myNutrition.domain.user.exception.NicknameAlreadyExistsException;
-import com.example.myNutrition.domain.user.exception.NotSamePasswordException;
-import com.example.myNutrition.domain.user.exception.UserCreateFailException;
+import com.example.myNutrition.domain.user.exception.*;
 import com.example.myNutrition.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +31,6 @@ public class UserService {
         validateUserCreateRequest(userCreateRequestDto);
         log.info("[signUpUser] UserCreateRequestDto : {}", userCreateRequestDto);
 
-        // todo : 중복 이메일, 닉네임 체크, 유저 상태, 유저 역할 변경 기능 추가
         User user = User.builder()
                 .email(userCreateRequestDto.getEmail())
                 .password(encodedPassword)
@@ -60,7 +56,7 @@ public class UserService {
 
     public void checkPassword(String email, PasswordCheckRequestDto requestDto) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("유저 정보를 찾을 수 없습니다."));
+                .orElseThrow(() -> new UserNotFoundException("유저 정보를 찾을 수 없습니다."));
         if (!passwordEncoder.matches(requestDto.password(), user.getPassword())) {
             throw new NotSamePasswordException("비밀번호가 일치하지 않습니다.");
         }
@@ -68,7 +64,7 @@ public class UserService {
 
     public void updatePassword(String email, PasswordUpdateRequestDto dto) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("유저 정보를 찾을 수 없습니다."));
+                .orElseThrow(() -> new UserNotFoundException("유저 정보를 찾을 수 없습니다."));
 
         //기존 비밀번호와 같을시 에러
         if (passwordEncoder.matches(dto.password(), user.getPassword())) {
@@ -82,11 +78,11 @@ public class UserService {
 
     public void updateNickname(String email, NicknameUpdateRequestDto dto) {
         if (userRepository.existsByNickname(dto.nickname())) {
-            throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
+            throw new NicknameAlreadyExistsException("이미 사용 중인 닉네임입니다.");
         }
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("유저 정보를 찾을 수 없습니다."));
+                .orElseThrow(() -> new UserNotFoundException("유저 정보를 찾을 수 없습니다."));
 
         user.updateNickname(dto.nickname());
         userRepository.save(user);
