@@ -40,4 +40,12 @@ public class UserEntity extends BaseTimeEntity {
         this.nickname = nickname;
         this.userRole = userRole;
     }
+
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }
