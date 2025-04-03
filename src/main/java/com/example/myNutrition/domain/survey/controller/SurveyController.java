@@ -37,6 +37,13 @@ public class SurveyController {
         return ResponseEntity.ok(new SingleResponse<>(200, "설문 조회 성공", survey));
     }
 
+    @Operation(summary = "설문 완료", description = "설문을 완료 상태로 표시합니다.")
+    @PatchMapping("/complete")
+    public ResponseEntity<SingleResponse<Void>> completeSurvey() {
+        surveyService.completeSurvey();
+        return ResponseEntity.ok(new SingleResponse<>(200, "설문 완료 처리 성공", null));
+    }
+
 
 
     @PatchMapping("/{surveyId}/gender")

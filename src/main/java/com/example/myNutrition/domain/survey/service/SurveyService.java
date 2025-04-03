@@ -60,6 +60,23 @@ public class SurveyService {
     }
 
     @Transactional
+    public void completeSurvey() {
+        Long userId = SecurityUtils.getCurrentUserId();
+        Survey survey = surveyRepository.findByUserId(userId)
+                .orElseThrow(() -> new NotFoundException("설문이 존재하지 않습니다."));
+
+//        if (!isSurveyFilled(survey)) {
+//            throw new InvalidSurveyException("설문이 아직 완전히 작성되지 않았습니다.");
+//        }
+
+        survey.completeSurvey();
+    }
+
+
+
+
+
+    @Transactional
     public void updateGender(Long surveyId, GenderUpdateRequestDto requestDto) {
         Survey survey = validateSurveyCreateRequest(surveyId);
 

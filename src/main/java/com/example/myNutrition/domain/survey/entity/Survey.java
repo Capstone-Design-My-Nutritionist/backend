@@ -22,6 +22,9 @@ public class Survey {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private boolean completed = false;
+
     private int age;
     private int height;
     private int weight;
@@ -148,6 +151,12 @@ public class Survey {
 
     public void updateSmoking(Smoking smoking) {
         this.smoking = smoking;
+    }
+
+
+    //설문조사 종료
+    public void completeSurvey() {
+        this.completed = true;
     }
 
 }
