@@ -1,5 +1,6 @@
 package com.example.myNutrition.common.security.filter;
 
+import com.example.myNutrition.common.dto.PermitAllProperties;
 import com.example.myNutrition.common.security.jwt.JwtAuthenticationToken;
 import com.example.myNutrition.common.security.jwt.JwtTokenProvider;
 import com.example.myNutrition.common.security.jwt.JwtUtils;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -24,14 +26,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserDetailsService userDetailsService;
-    private final JwtService jwtService;
     private final JwtUtils jwtUtils;
+    private final PermitAllProperties permitAllProperties;
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+        String requestURI = request.getRequestURI();
+
+        if (permitAllProperties.getUrls().stream().anyMatch(url -> pathMatcher.match(url, requestURI))) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String accessToken = jwtUtils.getTokenFromHeader(request);
-        String refreshToken = jwtUtils.getTokenFromCookie(request);
 
         // Access Token이 있는 경우
         if (accessToken != null && jwtTokenProvider.validateAccessToken(accessToken)) {
