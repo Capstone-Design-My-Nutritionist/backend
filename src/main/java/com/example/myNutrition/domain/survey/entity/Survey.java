@@ -1,7 +1,7 @@
 package com.example.myNutrition.domain.survey.entity;
 
 import com.example.myNutrition.domain.survey.entity.mappingTable.*;
-import com.example.myNutrition.domain.survey.enums.*;
+import com.example.myNutrition.domain.survey.enums.singular.*;
 import com.example.myNutrition.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

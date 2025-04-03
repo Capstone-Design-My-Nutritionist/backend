@@ -1,6 +1,7 @@
 package com.example.myNutrition.domain.survey.entity.mappingTable;
 
 import com.example.myNutrition.domain.survey.entity.Survey;
+import com.example.myNutrition.domain.survey.enums.plural.Supplement;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,7 +11,8 @@ public class SurveySupplement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String supplement; // ex: 오메가3, 마그네슘 등
+    @Enumerated(EnumType.STRING)
+    private Supplement supplement; // ex: 오메가3, 마그네슘 등
 
     @ManyToOne
     @JoinColumn(name = "survey_id")
