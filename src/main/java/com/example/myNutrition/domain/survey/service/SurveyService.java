@@ -3,8 +3,10 @@ package com.example.myNutrition.domain.survey.service;
 import com.example.myNutrition.common.exception.NotFoundException;
 import com.example.myNutrition.common.security.util.SecurityUtils;
 import com.example.myNutrition.domain.survey.dto.request.*;
+import com.example.myNutrition.domain.survey.dto.request.plural.GenderUpdateRequestDto;
 import com.example.myNutrition.domain.survey.entity.Survey;
-import com.example.myNutrition.domain.survey.enums.singular.Gender;
+import com.example.myNutrition.domain.survey.entity.mappingTable.*;
+import com.example.myNutrition.domain.survey.enums.plural.*;
 import com.example.myNutrition.domain.survey.repository.SurveyRepository;
 import com.example.myNutrition.domain.user.entity.User;
 import com.example.myNutrition.domain.user.exception.UserNotFoundException;
@@ -13,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -96,6 +100,73 @@ public class SurveyService {
     public void updateAllergyStatus(Long surveyId, AllergyStatusUpdateRequestDto dto) {
         Survey survey = validateSurveyCreateRequest(surveyId);
         survey.updateHasAllergy(dto.hasAllergy());
+    }
+
+
+
+
+    @Transactional
+    public void updateMedications(Long surveyId, List<Medication> medications) {
+        Survey survey = validateSurveyCreateRequest(surveyId);
+        survey.getMedications().clear();
+        for (Medication medication : medications) {
+            survey.getMedications().add(new SurveyMedication(medication, survey));
+        }
+    }
+
+    @Transactional
+    public void updateSupplements(Long surveyId, List<Supplement> supplements) {
+        Survey survey = validateSurveyCreateRequest(surveyId);
+        survey.getSupplements().clear();
+        for (Supplement supplement : supplements) {
+            survey.getSupplements().add(new SurveySupplement(supplement, survey));
+        }
+    }
+
+
+    @Transactional
+    public void updateDiseases(Long surveyId, List<Disease> diseases) {
+        Survey survey = validateSurveyCreateRequest(surveyId);
+        survey.getDiseases().clear();
+        for (Disease disease : diseases) {
+            survey.getDiseases().add(new SurveyDisease(disease, survey));
+        }
+    }
+
+    @Transactional
+    public void updateFamilyHistories(Long surveyId, List<FamilyHistory> familyHistorys) {
+        Survey survey = validateSurveyCreateRequest(surveyId);
+        survey.getFamilyHistories().clear();
+        for (FamilyHistory familyHistory : familyHistorys) {
+            survey.getFamilyHistories().add(new SurveyFamilyHistory(familyHistory, survey));
+        }
+    }
+
+    @Transactional
+    public void updateAllergies(Long surveyId, List<Allergy> allergies) {
+        Survey survey = validateSurveyCreateRequest(surveyId);
+        survey.getAllergies().clear();
+        for (Allergy allergy : allergies) {
+            survey.getAllergies().add(new SurveyAllergy(allergy, survey));
+        }
+    }
+
+    @Transactional
+    public void updateConcerns(Long surveyId, List<HealthConcern> healthConcerns) {
+        Survey survey = validateSurveyCreateRequest(surveyId);
+        survey.getConcerns().clear();
+        for (HealthConcern healthConcern : healthConcerns) {
+            survey.getConcerns().add(new SurveyConcern(healthConcern, survey));
+        }
+    }
+
+    @Transactional
+    public void updateHealthGoals(Long surveyId, List<HealthGoal> healthGoals) {
+        Survey survey = validateSurveyCreateRequest(surveyId);
+        survey.getHealthGoals().clear();
+        for (HealthGoal healthGoal : healthGoals) {
+            survey.getHealthGoals().add(new SurveyHealthGoal(healthGoal, survey));
+        }
     }
 
 

@@ -2,6 +2,7 @@ package com.example.myNutrition.domain.survey.controller;
 
 import com.example.myNutrition.common.response.SingleResponse;
 import com.example.myNutrition.domain.survey.dto.request.*;
+import com.example.myNutrition.domain.survey.dto.request.plural.*;
 import com.example.myNutrition.domain.survey.service.SurveyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -69,6 +70,8 @@ public class SurveyController {
 
 
 
+    //boolean
+
     @Operation(summary = "약 복용 여부 저장", description = "설문에서 약 복용 여부를 저장합니다.")
     @PatchMapping("/{surveyId}/medication-status")
     public ResponseEntity<SingleResponse<String>> updateMedicationStatus(
@@ -120,14 +123,70 @@ public class SurveyController {
     }
 
 
+
+    //다중 선택 항목
+
+    @Operation(summary = "복용약 선택 저장", description = "설문에서 사용자가 복용 중인 약 정보를 저장합니다.")
     @PatchMapping("/{surveyId}/medications")
-    @Operation(summary = "복용약 선택 항목 저장", description = "복용 중인 약을 선택합니다.")
     public ResponseEntity<SingleResponse<Void>> updateMedications(
             @PathVariable Long surveyId,
-            @RequestBody UpdateMedicationsRequest request
-    ) {
-        surveyService.updateMedications(surveyId, request.medications());
-        return ResponseEntity.ok(new SingleResponse<>(200, "복용약 항목 업데이트 완료", null));
+            @RequestBody SurveyMedicationRequestDto requestDto) {
+        surveyService.updateMedications(surveyId, requestDto.getMedications());
+        return ResponseEntity.ok(new SingleResponse<>(200, "복용약 정보 저장 완료", null));
+    }
+
+    @Operation(summary = "영양제 선택 저장", description = "설문에서 사용자가 복용 중인 건강기능식품 정보를 저장합니다.")
+    @PatchMapping("/{surveyId}/supplements")
+    public ResponseEntity<SingleResponse<Void>> updateSupplements(
+            @PathVariable Long surveyId,
+            @RequestBody SurveySupplementRequestDto requestDto) {
+        surveyService.updateSupplements(surveyId, requestDto.getSupplements());
+        return ResponseEntity.ok(new SingleResponse<>(200, "영양제 정보 저장 완료", null));
+    }
+
+    @Operation(summary = "진단 질환 저장", description = "설문에서 사용자가 진단받은 질환 정보를 저장합니다.")
+    @PatchMapping("/{surveyId}/diseases")
+    public ResponseEntity<SingleResponse<Void>> updateDiseases(
+            @PathVariable Long surveyId,
+            @RequestBody SurveyDiseaseRequestDto requestDto) {
+        surveyService.updateDiseases(surveyId, requestDto.getDiseases());
+        return ResponseEntity.ok(new SingleResponse<>(200, "진단 질환 저장 완료", null));
+    }
+
+    @Operation(summary = "가족력 질환 저장", description = "설문에서 사용자의 가족력 정보를 저장합니다.")
+    @PatchMapping("/{surveyId}/family-histories")
+    public ResponseEntity<SingleResponse<Void>> updateFamilyHistories(
+            @PathVariable Long surveyId,
+            @RequestBody SurveyFamilyHistoryRequestDto requestDto) {
+        surveyService.updateFamilyHistories(surveyId, requestDto.getFamilyDiseases());
+        return ResponseEntity.ok(new SingleResponse<>(200, "가족력 질환 저장 완료", null));
+    }
+
+    @Operation(summary = "알레르기 저장", description = "설문에서 사용자의 알레르기 정보를 저장합니다.")
+    @PatchMapping("/{surveyId}/allergies")
+    public ResponseEntity<SingleResponse<Void>> updateAllergies(
+            @PathVariable Long surveyId,
+            @RequestBody SurveyAllergyRequestDto requestDto) {
+        surveyService.updateAllergies(surveyId, requestDto.getAllergies());
+        return ResponseEntity.ok(new SingleResponse<>(200, "알레르기 정보 저장 완료", null));
+    }
+
+    @Operation(summary = "건강 고민 저장", description = "설문에서 사용자가 가진 건강 고민을 저장합니다.")
+    @PatchMapping("/{surveyId}/concerns")
+    public ResponseEntity<SingleResponse<Void>> updateConcerns(
+            @PathVariable Long surveyId,
+            @RequestBody SurveyHealthConcernRequestDto requestDto) {
+        surveyService.updateConcerns(surveyId, requestDto.getConcerns());
+        return ResponseEntity.ok(new SingleResponse<>(200, "건강 고민 저장 완료", null));
+    }
+
+    @Operation(summary = "건강 목표 저장", description = "설문에서 사용자의 건강 목표 정보를 저장합니다.")
+    @PatchMapping("/{surveyId}/goals")
+    public ResponseEntity<SingleResponse<Void>> updateGoals(
+            @PathVariable Long surveyId,
+            @RequestBody SurveyHealthGoalRequestDto requestDto) {
+        surveyService.updateHealthGoals(surveyId, requestDto.getGoals());
+        return ResponseEntity.ok(new SingleResponse<>(200, "건강 목표 저장 완료", null));
     }
 
 
