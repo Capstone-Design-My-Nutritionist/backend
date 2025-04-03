@@ -25,6 +25,12 @@ public class GlobalExceptionHandler {
                 .body(new ExceptionResponse(e.getMessage(), HttpStatus.NOT_FOUND.value()));
     }
 
+    @ExceptionHandler(BadRequestException.class)
+    protected ResponseEntity<ExceptionResponse> handleBadRequestException(BadRequestException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ExceptionResponse(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+    }
+
     @ExceptionHandler(JwtException.class)
     protected ResponseEntity<ExceptionResponse> handleJwtException(JwtException e) {
         if (e.getErrorCode().getErrorCode().equals("SEC_005")){
@@ -40,6 +46,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ExceptionResponse(e.getBindingResult().getFieldErrors().get(0).getDefaultMessage(), HttpStatus.BAD_REQUEST.value()));
     }
+
+
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleUsernameNotFoundException(UsernameNotFoundException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
