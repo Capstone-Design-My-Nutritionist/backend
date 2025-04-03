@@ -3,8 +3,13 @@ package com.example.myNutrition.common.security.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@NoArgsConstructor
+@Setter
+@Getter
 public class LoginRequestDto {
 
     @Schema(description = "이메일 주소", example = "gisu1102@gmail.com")
