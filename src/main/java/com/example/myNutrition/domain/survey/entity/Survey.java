@@ -118,4 +118,40 @@ public class Survey {
         this.smoking = smoking;
         this.user = user;
     }
+
+
+    //설문 조사별 각 Patch 메서드
+    public void updateGender(Gender gender) {
+        this.gender = gender;
+    }
+    public void updateAge(int age) {
+        this.age = age;
+    }
+    public void updateHeight(int height) {
+        this.height = height;
+    }
+    public void updateWeight(int weight) {
+        this.weight = weight;
+    }
+
+    //boolean
+    public void updateTakingMedication(boolean takingMedication) {
+        this.takingMedication = takingMedication;
+    }
+    public void updateTakingSupplements(boolean takingSupplements) {
+        this.takingSupplements = takingSupplements;
+    }
+    public void updateHasDiagnosedDisease(boolean hasDiagnosedDisease) {
+        this.hasDiagnosedDisease = hasDiagnosedDisease;
+    }
+    public void updateHasFamilyHistory(boolean hasFamilyHistory) {
+        this.hasFamilyHistory = hasFamilyHistory;
+    }
+    public void updateHasAllergy(boolean hasAllergy) {
+        this.hasAllergy = hasAllergy;
+    }
+
+    //Enum
+
+
 }
