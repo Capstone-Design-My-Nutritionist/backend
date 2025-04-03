@@ -4,6 +4,7 @@ import com.example.myNutrition.common.response.SingleResponse;
 import com.example.myNutrition.domain.survey.dto.request.*;
 import com.example.myNutrition.domain.survey.dto.request.plural.*;
 import com.example.myNutrition.domain.survey.dto.request.singular.*;
+import com.example.myNutrition.domain.survey.dto.response.SurveyResponseDto;
 import com.example.myNutrition.domain.survey.service.SurveyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,6 +29,15 @@ public class SurveyController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new SingleResponse<>(201, "설문이 생성되었습니다.", surveyId));
     }
+
+    @Operation(summary = "설문 조회", description = "로그인한 사용자의 설문 전체를 조회합니다.")
+    @GetMapping
+    public ResponseEntity<SingleResponse<SurveyResponseDto>> getSurvey() {
+        SurveyResponseDto survey = surveyService.getSurvey();
+        return ResponseEntity.ok(new SingleResponse<>(200, "설문 조회 성공", survey));
+    }
+
+
 
     @PatchMapping("/{surveyId}/gender")
     @Operation(summary = "성별 업데이트", description = "설문에서 성별을 저장합니다.")

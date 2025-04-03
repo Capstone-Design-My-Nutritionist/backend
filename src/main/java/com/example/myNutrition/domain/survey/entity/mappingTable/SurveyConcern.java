@@ -3,8 +3,10 @@ package com.example.myNutrition.domain.survey.entity.mappingTable;
 import com.example.myNutrition.domain.survey.entity.Survey;
 import com.example.myNutrition.domain.survey.enums.plural.HealthConcern;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
 @Table(name = "survey_concern")
 @NoArgsConstructor
