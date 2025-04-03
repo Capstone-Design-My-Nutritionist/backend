@@ -1,6 +1,7 @@
 package com.example.myNutrition.domain.user.controller;
 
 
+import com.example.myNutrition.common.response.SingleResponse;
 import com.example.myNutrition.domain.user.dto.UserCreateRequestDto;
 import com.example.myNutrition.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/api/users", produces = "plain/text; charset=utf-8")
+@RequestMapping(value = "/api/users")
 @Tag(name = "User API")
 @RequiredArgsConstructor
 public class UserController {
@@ -23,10 +24,11 @@ public class UserController {
 
     @Operation(summary = "회원가입")
     @PostMapping("/signup")
-    public ResponseEntity<?> signUpUser(
+    public ResponseEntity<SingleResponse<?>> signUpUser(
             @RequestBody @Valid UserCreateRequestDto userCreateRequestDto) {
         userService.createUser(userCreateRequestDto);
-        return ResponseEntity.ok("회원가입 성공");
+        return ResponseEntity.ok()
+                .body(new SingleResponse<>(200, "회원가입 성공", null));
     }
 
 }
