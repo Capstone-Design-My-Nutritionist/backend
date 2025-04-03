@@ -1,7 +1,7 @@
 package com.example.myNutrition.domain.user.security;
 
 
-import com.example.myNutrition.domain.user.entity.UserEntity;
+import com.example.myNutrition.domain.user.entity.User;
 import com.example.myNutrition.domain.user.entity.UserRole;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,15 +32,15 @@ public class CustomUserDetails implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static CustomUserDetails from(UserEntity userEntity) {
+    public static CustomUserDetails from(User user) {
         return CustomUserDetails.builder()
-                .id(userEntity.getId())  // id 타입을 Long으로 맞춤
-                .email(userEntity.getEmail())
-                .password(userEntity.getPassword())
-                .nickname(userEntity.getNickname())
-                .role(userEntity.getUserRole())
+                .id(user.getId())  // id 타입을 Long으로 맞춤
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .nickname(user.getNickname())
+                .role(user.getUserRole())
                 .authorities(Collections.singletonList(
-                        new SimpleGrantedAuthority("ROLE_" + userEntity.getUserRole().name())))
+                        new SimpleGrantedAuthority("ROLE_" + user.getUserRole().name())))
                 .build();
     }
 

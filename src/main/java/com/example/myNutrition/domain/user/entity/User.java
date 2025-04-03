@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Table(name = "users") // 테이블 이름 지정 (선택 사항)
-public class UserEntity extends BaseTimeEntity {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // MySQL의 AUTO_INCREMENT 적용
@@ -34,7 +34,7 @@ public class UserEntity extends BaseTimeEntity {
     private UserRole userRole;
 
     @Builder
-    public UserEntity(String email, String password, String nickname, UserRole userRole) {
+    public User(String email, String password, String nickname, UserRole userRole) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
