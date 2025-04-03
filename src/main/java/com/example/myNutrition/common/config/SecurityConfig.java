@@ -1,6 +1,7 @@
 package com.example.myNutrition.common.config;
 
 
+import com.example.myNutrition.common.dto.PermitAllProperties;
 import com.example.myNutrition.common.security.filter.ExceptionHandlerFilter;
 import com.example.myNutrition.common.security.filter.JwtAuthenticationFilter;
 import com.example.myNutrition.common.security.jwt.JwtTokenProvider;
@@ -33,9 +34,8 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserDetailsService userDetailsService;
-    private final JwtService jwtService;
     private final JwtUtils jwtUtils;
-
+    private final PermitAllProperties permitAllProperties;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -48,18 +48,14 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 사용하지 않음
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/swagger-ui.html"
-                        ).permitAll() // Swagger 관련 경로 허용
+                        .requestMatchers(permitAllProperties.getUrls().toArray(new String[0])).permitAll() // Swagger 관련 경로 허용
                         .requestMatchers("/api/**").permitAll() //공개 API
                         .requestMatchers("/auth/**").permitAll() //hasRole("ADMIN") // 관리자 API
-                        .anyRequest().authenticated() // 나머지는 인증 필요
+                        .anyRequest().permitAll() // 나머지는 인증 필요
                 )
                 // JwtAuthenticationFilter 추가
                 .addFilterBefore(
-                        new JwtAuthenticationFilter(jwtTokenProvider, userDetailsService, jwtService, jwtUtils),
+                        new JwtAuthenticationFilter(jwtTokenProvider, userDetailsService, jwtUtils, permitAllProperties),
                         UsernamePasswordAuthenticationFilter.class
                 )
                 // 예외 처리 필터 추가
