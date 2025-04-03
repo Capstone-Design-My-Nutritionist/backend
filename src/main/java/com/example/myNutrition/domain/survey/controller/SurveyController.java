@@ -3,6 +3,7 @@ package com.example.myNutrition.domain.survey.controller;
 import com.example.myNutrition.common.response.SingleResponse;
 import com.example.myNutrition.domain.survey.dto.request.*;
 import com.example.myNutrition.domain.survey.dto.request.plural.*;
+import com.example.myNutrition.domain.survey.dto.request.singular.*;
 import com.example.myNutrition.domain.survey.service.SurveyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -189,5 +190,70 @@ public class SurveyController {
         return ResponseEntity.ok(new SingleResponse<>(200, "건강 목표 저장 완료", null));
     }
 
+
+
+    //단일 항목
+    @Operation(summary = "수면 시간 저장", description = "하루 평균 수면 시간을 저장합니다.")
+    @PatchMapping("/{surveyId}/sleep-time")
+    public ResponseEntity<SingleResponse<String>> updateSleepTime(
+            @PathVariable Long surveyId,
+            @RequestBody SurveySleepTimeRequestDto dto) {
+        surveyService.updateSleepTime(surveyId, dto);
+        return ResponseEntity.ok(new SingleResponse<>(200, "수면 시간 저장 완료", null));
+    }
+
+    @Operation(summary = "운동 빈도 저장", description = "주간 운동 빈도를 저장합니다.")
+    @PatchMapping("/{surveyId}/exercise-frequency")
+    public ResponseEntity<SingleResponse<String>> updateExerciseFrequency(
+            @PathVariable Long surveyId,
+            @RequestBody SurveyExerciseFrequencyRequestDto dto) {
+        surveyService.updateExerciseFrequency(surveyId, dto);
+        return ResponseEntity.ok(new SingleResponse<>(200, "운동 빈도 저장 완료", null));
+    }
+
+    @Operation(summary = "끼니 수 저장", description = "하루 평균 끼니 수를 저장합니다.")
+    @PatchMapping("/{surveyId}/meal-count")
+    public ResponseEntity<SingleResponse<String>> updateMealCount(
+            @PathVariable Long surveyId,
+            @RequestBody SurveyMealCountRequestDto dto) {
+        surveyService.updateMealCount(surveyId, dto);
+        return ResponseEntity.ok(new SingleResponse<>(200, "끼니 수 저장 완료", null));
+    }
+
+    @Operation(summary = "채소/과일 섭취 빈도 저장", description = "채소와 과일 섭취 빈도 정보를 저장합니다.")
+    @PatchMapping("/{surveyId}/vegetable-fruit-intake")
+    public ResponseEntity<SingleResponse<String>> updateVegetableFruitIntake(
+            @PathVariable Long surveyId,
+            @RequestBody SurveyVegetableFruitIntakeRequestDto dto) {
+        surveyService.updateVegetableFruitIntake(surveyId, dto);
+        return ResponseEntity.ok(new SingleResponse<>(200, "섭취 빈도 저장 완료", null));
+    }
+
+    @Operation(summary = "물 섭취량 저장", description = "하루 평균 물 섭취량을 저장합니다.")
+    @PatchMapping("/{surveyId}/water-intake")
+    public ResponseEntity<SingleResponse<String>> updateWaterIntake(
+            @PathVariable Long surveyId,
+            @RequestBody SurveyWaterIntakeRequestDto dto) {
+        surveyService.updateWaterIntake(surveyId, dto);
+        return ResponseEntity.ok(new SingleResponse<>(200, "물 섭취량 저장 완료", null));
+    }
+
+    @Operation(summary = "음주 정보 저장", description = "음주 빈도 정보를 저장합니다.")
+    @PatchMapping("/{surveyId}/drinking")
+    public ResponseEntity<SingleResponse<String>> updateDrinking(
+            @PathVariable Long surveyId,
+            @RequestBody SurveyDrinkingRequestDto dto) {
+        surveyService.updateDrinking(surveyId, dto);
+        return ResponseEntity.ok(new SingleResponse<>(200, "음주 정보 저장 완료", null));
+    }
+
+    @Operation(summary = "흡연 정보 저장", description = "흡연 상태를 저장합니다.")
+    @PatchMapping("/{surveyId}/smoking")
+    public ResponseEntity<SingleResponse<String>> updateSmoking(
+            @PathVariable Long surveyId,
+            @RequestBody SurveySmokingRequestDto dto) {
+        surveyService.updateSmoking(surveyId, dto);
+        return ResponseEntity.ok(new SingleResponse<>(200, "흡연 정보 저장 완료", null));
+    }
 
 }

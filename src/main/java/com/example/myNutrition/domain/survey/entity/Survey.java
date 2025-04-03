@@ -154,4 +154,34 @@ public class Survey {
     //Enum
 
 
+    //단일 입력
+
+    public void updateSleepTime(SleepTime sleepTime) {
+        this.sleepTime = sleepTime;
+    }
+
+    public void updateExerciseFrequency(ExerciseFrequency frequency) {
+        this.exerciseFrequency = frequency;
+    }
+
+    public void updateMealCount(Integer mealCount) {
+        this.mealCount = mealCount;
+    }
+
+    public void updateVegetableFruitIntake(VegetableFruitIntake intake) {
+        this.vegetableFruitIntake = intake;
+    }
+
+    public void updateWaterIntake(WaterIntake waterIntake) {
+        this.waterIntake = waterIntake;
+    }
+
+    public void updateDrinking(Drinking drinking) {
+        this.drinking = drinking;
+    }
+
+    public void updateSmoking(Smoking smoking) {
+        this.smoking = smoking;
+    }
+
 }

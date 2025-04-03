@@ -4,6 +4,7 @@ import com.example.myNutrition.common.exception.NotFoundException;
 import com.example.myNutrition.common.security.util.SecurityUtils;
 import com.example.myNutrition.domain.survey.dto.request.*;
 import com.example.myNutrition.domain.survey.dto.request.plural.GenderUpdateRequestDto;
+import com.example.myNutrition.domain.survey.dto.request.singular.*;
 import com.example.myNutrition.domain.survey.entity.Survey;
 import com.example.myNutrition.domain.survey.entity.mappingTable.*;
 import com.example.myNutrition.domain.survey.enums.plural.*;
@@ -167,6 +168,51 @@ public class SurveyService {
         for (HealthGoal healthGoal : healthGoals) {
             survey.getHealthGoals().add(new SurveyHealthGoal(healthGoal, survey));
         }
+    }
+
+
+    //Singular
+
+    @Transactional
+    public void updateSleepTime(Long surveyId, SurveySleepTimeRequestDto dto) {
+        Survey survey = validateSurveyCreateRequest(surveyId);
+        survey.updateSleepTime(dto.getSleepTime());
+    }
+
+    @Transactional
+    public void updateExerciseFrequency(Long surveyId, SurveyExerciseFrequencyRequestDto dto) {
+        Survey survey = validateSurveyCreateRequest(surveyId);
+        survey.updateExerciseFrequency(dto.getExerciseFrequency());
+    }
+
+    @Transactional
+    public void updateMealCount(Long surveyId, SurveyMealCountRequestDto dto) {
+        Survey survey = validateSurveyCreateRequest(surveyId);
+        survey.updateMealCount(dto.getMealCount());
+    }
+
+    @Transactional
+    public void updateVegetableFruitIntake(Long surveyId, SurveyVegetableFruitIntakeRequestDto dto) {
+        Survey survey = validateSurveyCreateRequest(surveyId);
+        survey.updateVegetableFruitIntake(dto.getVegetableFruitIntake());
+    }
+
+    @Transactional
+    public void updateWaterIntake(Long surveyId, SurveyWaterIntakeRequestDto dto) {
+        Survey survey = validateSurveyCreateRequest(surveyId);
+        survey.updateWaterIntake(dto.getWaterIntake());
+    }
+
+    @Transactional
+    public void updateDrinking(Long surveyId, SurveyDrinkingRequestDto dto) {
+        Survey survey = validateSurveyCreateRequest(surveyId);
+        survey.updateDrinking(dto.getDrinking());
+    }
+
+    @Transactional
+    public void updateSmoking(Long surveyId, SurveySmokingRequestDto dto) {
+        Survey survey = validateSurveyCreateRequest(surveyId);
+        survey.updateSmoking(dto.getSmoking());
     }
 
 
