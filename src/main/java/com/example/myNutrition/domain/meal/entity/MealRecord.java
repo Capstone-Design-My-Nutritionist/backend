@@ -1,5 +1,6 @@
 package com.example.myNutrition.domain.meal.entity;
 
+import com.example.myNutrition.common.BaseTimeEntity;
 import com.example.myNutrition.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -13,7 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MealRecord {
+public class MealRecord extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,9 +25,6 @@ public class MealRecord {
 
     @OneToMany(mappedBy = "mealRecord", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MealImage> mealImages = new ArrayList<>();
-
-    @OneToMany(mappedBy = "mealRecord", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SupplementIntake> supplementIntakes = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
