@@ -3,6 +3,8 @@ package com.example.myNutrition.domain.meal.controller;
 import com.example.myNutrition.common.response.SingleResponse;
 import com.example.myNutrition.domain.meal.dto.request.MealFoodRegisterRequestDto;
 import com.example.myNutrition.domain.meal.dto.response.DailyMealRecordResponseDto;
+import com.example.myNutrition.domain.meal.dto.response.DailyNutritionSummaryResponseDto;
+import com.example.myNutrition.domain.meal.entity.MealTime;
 import com.example.myNutrition.domain.meal.service.MealRecordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -54,6 +56,35 @@ public class MealController {
 
 
 
+    @Operation(summary = "하루 식사 기록 조회", description = "하루 동안 아침, 점심, 저녁의 식사 기록을 조회합니다.")
+    @GetMapping("/meal-records")
+    public ResponseEntity<SingleResponse<DailyMealRecordResponseDto>> getDailyMealRecords(
+            @Parameter(description = "조회할 날짜 (yyyy-MM-dd)", example = "2025-04-25")
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        DailyMealRecordResponseDto response = mealRecordService.getDailyMealRecords(date);
+        return ResponseEntity.ok(new SingleResponse<>(200, "하루 식사 기록 조회 성공", response));
+    }
 
+    @Operation(summary = "하루 중 특정 식사 기록 조회", description = "아침, 점심, 저녁, 간식 중 선택한 식사의 기록을 조회합니다.")
+    @GetMapping("/meals/{mealTime}")
+    public ResponseEntity<SingleResponse<DailyMealRecordResponseDto.MealRecordDto>> getMealByTime(
+            @Parameter(description = "조회할 날짜", example = "2025-04-04")
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @Parameter(description = "식사 시간 (BREAKFAST, LUNCH, DINNER, SNACK)", example = "LUNCH")
+            @PathVariable MealTime mealTime
+    ) {
+        DailyMealRecordResponseDto.MealRecordDto result = mealRecordService.getMealRecordByTime(date, mealTime);
+        return ResponseEntity.ok(new SingleResponse<>(200, mealTime.getDisplayName() + " 식사 조회 완료", result));
+    }
+
+    @Operation(summary = "하루 영양소 총합 조회", description = "사용자가 하루 동안 섭취한 총 영양소 정보를 조회합니다.")
+    @GetMapping("/meals/nutrition/summary")
+    public ResponseEntity<SingleResponse<DailyNutritionSummaryResponseDto>> getDailyNutritionSummary(
+            @Parameter(description = "조회할 날짜", example = "2025-04-05")
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+    ) {
+        DailyNutritionSummaryResponseDto summary = mealRecordService.getDailyNutritionSummary(date);
+        return ResponseEntity.ok(new SingleResponse<>(200, "하루 영양소 총합 조회 성공", summary));
+    }
 
 }
