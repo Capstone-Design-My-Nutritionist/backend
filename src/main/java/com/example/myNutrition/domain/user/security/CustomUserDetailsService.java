@@ -1,7 +1,7 @@
 package com.example.myNutrition.domain.user.security;
 
 
-import com.example.myNutrition.domain.user.entity.UserEntity;
+import com.example.myNutrition.domain.user.entity.User;
 import com.example.myNutrition.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +18,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        UserEntity user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없음, email :" + email));
 
         return CustomUserDetails.from(user);
