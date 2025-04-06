@@ -16,7 +16,7 @@ public class LoginRequestDto {
     @NotBlank
     private String email;
 
-    @Schema(description = "비밀번호", example = "passowrd")
+    @Schema(description = "비밀번호", example = "password")
     @NotBlank
     private String password;
 
