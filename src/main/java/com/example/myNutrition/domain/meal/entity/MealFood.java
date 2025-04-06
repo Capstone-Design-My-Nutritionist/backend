@@ -23,7 +23,8 @@ public class MealFood {
     @ManyToOne(fetch = FetchType.LAZY)
     private MealImage mealImage;
 
-    @OneToOne(mappedBy = "mealFood", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "nutrition_detail_id")
     private NutritionDetail nutritionDetail;
 
     @Builder
@@ -37,4 +38,5 @@ public class MealFood {
     public void setMealImage(MealImage mealImage) {
         this.mealImage = mealImage;
     }
+
 }

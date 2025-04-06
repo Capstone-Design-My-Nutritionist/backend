@@ -35,12 +35,6 @@ public class NutritionDetail {
     private Double vitaminD;
     private Double vitaminE;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    private MealFood mealFood;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    private SupplementIntake supplementIntake;
-
     @Builder
     public NutritionDetail(Double energy, Double carbohydrate, Double protein, Double fat,
                            Double cholesterol, Double dietaryFiber, Double calcium, Double saturatedFat,
@@ -62,13 +56,5 @@ public class NutritionDetail {
         this.vitaminC = vitaminC;
         this.vitaminD = vitaminD;
         this.vitaminE = vitaminE;
-    }
-
-    public void setMealFood(MealFood mealFood) {
-        this.mealFood = mealFood;
-    }
-
-    public void setSupplementIntake(SupplementIntake supplementIntake) {
-        this.supplementIntake = supplementIntake;
     }
 }
