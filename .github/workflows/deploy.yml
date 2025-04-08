@@ -37,7 +37,7 @@ jobs:
 
       - name: Build & Push Docker Image
         run: |
-          docker build -t gisu1102/my-nutrition:latest ./backend
+          docker build -t gisu1102/my-nutrition:latest 
           docker push gisu1102/my-nutrition:latest
 
       - name: Sync backend-resources (rsync) to EC2
