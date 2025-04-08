@@ -53,7 +53,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           source: "src/main/resources/docker-compose.prod.yml"
-          target: "/home/ubuntu/backend-resources/"
+          target: "/home/ubuntu/backend-resources/docker-compose.prod.yml "
 
       - name: Deploy via SSH on EC2
         uses: appleboy/ssh-action@master
