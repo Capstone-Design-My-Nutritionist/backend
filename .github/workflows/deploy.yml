@@ -1,0 +1,71 @@
+# .github/workflows/deploy.yml
+
+name: CI/CD Deploy on 'main' push
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code with submodules
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          token: ${{ secrets.SUB_TOKEN }}
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build Spring Boot Application
+        run: ./gradlew build -x test
+
+#       - name: 디렉토리 구조 확인
+#        run: ls -R
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build & Push Spring Image
+        run: |
+          docker build -t gisu1102/my-nutrition:latest .
+          docker push gisu1102/my-nutrition:latest
+
+      - name: Build & Push Nginx Image
+        run: |
+          docker build -t gisu1102/my-nutrition-nginx:latest ./nginx
+          docker push gisu1102/my-nutrition-nginx:latest
+
+      - name: Copy docker-compose.prod.yml to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          source: "src/main/resources/docker-compose.prod.yml"
+          target: "/home/ubuntu/backend-resources/"
+          strip_components: 3
+
+      - name: Deploy via SSH on EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          script: |
+           cd ~/backend-resources
+           docker pull gisu1102/my-nutrition:latest
+           docker pull gisu1102/my-nutrition-nginx:latest
+           docker compose -f docker-compose.prod.yml down
+           docker compose -f docker-compose.prod.yml up -d
