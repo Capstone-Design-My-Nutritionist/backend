@@ -7,6 +7,7 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.ForwardedHeaderFilter;
@@ -18,6 +19,9 @@ import java.util.List;
 @EnableWebMvc
 @RequiredArgsConstructor
 public class SwaggerConfig {
+
+    @Value("${swagger.base-url}")
+    private String swaggerBaseUrl;
 
     @Bean
     public OpenAPI customOpenAPI() {
@@ -43,11 +47,9 @@ public class SwaggerConfig {
                 .info(info)
                 .security(List.of(securityRequirement))
                 .components(new Components().addSecuritySchemes("JWT", securityScheme))
-                .servers(List.of(
-                        new Server().url("http://localhost:8080").description("Local Server") // Local Server
-                        //new Server().url("https://www.myNutrition.co.kr/api").description("Production Server") // Production Server
-                ));
+                .servers(List.of(new Server().url(swaggerBaseUrl).description("Active Profile Server")));
     }
+
 
     // ForwardedHeaderFilter Bean 등록 Nginx 프록시 서버 사용 시 필요
     @Bean
