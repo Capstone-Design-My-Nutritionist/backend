@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/surveys")
+@RequestMapping("/surveys")
 @RequiredArgsConstructor
 @Tag(name = "Survey API", description = "설문조사 관련 API")
 public class SurveyController {
