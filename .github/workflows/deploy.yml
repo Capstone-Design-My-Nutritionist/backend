@@ -4,7 +4,7 @@ name: CI/CD Deploy on 'main' push
 
 on:
   push:
-    branches: [ main ]
+    branches: [ chore/docker ]
 
 jobs:
   build-and-deploy:
