@@ -35,23 +35,25 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Build & Push Docker Image
+      - name: Build & Push Spring Image
         run: |
           docker build -t gisu1102/my-nutrition:latest .
           docker push gisu1102/my-nutrition:latest
 
-      - name: Sync backend-resources (rsync) to EC2
-        uses: burnett01/rsync-deployments@5.2
+      - name: Build & Push Nginx Image
+        run: |
+          docker build -t gisu1102/my-nutrition-nginx:latest ./nginx
+          docker push gisu1102/my-nutrition-nginx:latest
+
+      - name: Copy docker-compose.prod.yml to EC2
+        uses: appleboy/scp-action@master
         with:
-          switches: -avzr --delete
-          path: ./src/main/resources/
-          remote_path: /home/ubuntu/backend-resources/
-          remote_host: ${{ secrets.EC2_HOST }}
-          remote_user: ${{ secrets.EC2_USER }}
-          remote_key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          source: "src/main/resources/docker-compose.prod.yml"
+          target: "/home/ubuntu/backend-resources/"
 
       - name: Deploy via SSH on EC2
         uses: appleboy/ssh-action@master
@@ -61,7 +63,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
-            cd ~/backend-resources
-            docker pull gisu1102/my-nutrition:latest
-            docker compose -f docker-compose.prod.yml down
-            docker compose -f docker-compose.prod.yml up -d
+           cd ~/backend-resources
+           docker pull gisu1102/my-nutrition:latest
+           docker pull gisu1102/my-nutrition-nginx:latest
+           docker compose -f docker-compose.prod.yml down
+           docker compose -f docker-compose.prod.yml up -d
