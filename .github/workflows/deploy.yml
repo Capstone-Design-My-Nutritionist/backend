@@ -47,7 +47,7 @@ jobs:
         uses: burnett01/rsync-deployments@5.2
         with:
           switches: -avzr --delete
-          path: ./backend-resources/
+          path: ./src/main/resources/
           remote_path: /home/ubuntu/backend-resources/
           remote_host: ${{ secrets.EC2_HOST }}
           remote_user: ${{ secrets.EC2_USER }}
