@@ -26,8 +26,8 @@ jobs:
       - name: Build Spring Boot Application
         run: ./gradlew build -x test
 
-      - name: 디렉토리 구조 확인
-        run: ls -R
+#       - name: 디렉토리 구조 확인
+#        run: ls -R
 
       - name: Login to DockerHub
         uses: docker/login-action@v2
@@ -53,7 +53,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           source: "src/main/resources/docker-compose.prod.yml"
-          target: "/home/ubuntu/backend-resources/docker-compose.prod.yml"
+          target: "/home/ubuntu/backend-resources/"
+          strip_components: 3
 
       - name: Deploy via SSH on EC2
         uses: appleboy/ssh-action@master
