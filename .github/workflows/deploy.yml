@@ -24,7 +24,7 @@ jobs:
           java-version: '17'
 
       - name: Build Spring Boot Application
-        run: cd backend && ./gradlew build -x test
+        run: ./gradlew build -x test
 
       - name: Login to DockerHub
         uses: docker/login-action@v2
