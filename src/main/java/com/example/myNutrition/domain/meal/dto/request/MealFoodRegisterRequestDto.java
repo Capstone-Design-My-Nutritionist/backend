@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MealFoodRegisterRequestDto {
-    private MealType mealTime;
+    private MealType mealType;
     private String imageUrl;
     private List<MealFoodDto> foods;
 

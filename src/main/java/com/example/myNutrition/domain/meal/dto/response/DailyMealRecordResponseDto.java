@@ -19,7 +19,7 @@ public class DailyMealRecordResponseDto {
     @Builder
     @AllArgsConstructor
     public static class MealRecordDto {
-        private MealType mealTime;
+        private MealType mealType;
         private List<MealFoodDto> foods;
 
         @Getter

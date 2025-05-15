@@ -37,7 +37,7 @@ public class MealRecordService {
         // MealRecord 생성
         MealRecord mealRecord = MealRecord.builder()
                 .user(user)
-                .mealTime(request.getMealTime())
+                .mealType(request.getMealType())
                 .build();
 
         // MealImage 생성
@@ -84,7 +84,7 @@ public class MealRecordService {
                     .collect(Collectors.toList());
 
             return DailyMealRecordResponseDto.MealRecordDto.builder()
-                    .mealTime(record.getMealTime())
+                    .mealType(record.getMealType())
                     .foods(foodDtos)
                     .build();
         }).toList();
@@ -96,13 +96,13 @@ public class MealRecordService {
     }
 
     @Transactional(readOnly = true)
-    public DailyMealRecordResponseDto.MealRecordDto getMealRecordByTime(LocalDate date, MealTime mealTime) {
+    public DailyMealRecordResponseDto.MealRecordDto getMealRecordByTime(LocalDate date, MealType mealType) {
         Long userId = SecurityUtils.getCurrentUserId();
 
         LocalDateTime start = date.atStartOfDay();
         LocalDateTime end = date.atTime(LocalTime.MAX);
 
-        List<MealRecord> records = mealRecordRepository.findAllByUserIdAndMealTimeAndCreatedAtBetween(userId, mealTime, start, end);
+        List<MealRecord> records = mealRecordRepository.findAllByUserIdAndMealTypeAndCreatedAtBetween(userId, mealType, start, end);
 
         List<DailyMealRecordResponseDto.MealRecordDto.MealFoodDto> foods = records.stream()
                 .flatMap(record -> record.getMealImages().stream())
@@ -116,7 +116,7 @@ public class MealRecordService {
                 .collect(Collectors.toList());
 
         return DailyMealRecordResponseDto.MealRecordDto.builder()
-                .mealTime(mealTime)
+                .mealType(mealType)
                 .foods(foods)
                 .build();
     }
