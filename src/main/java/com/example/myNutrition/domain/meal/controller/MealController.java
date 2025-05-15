@@ -32,22 +32,36 @@ public class MealController {
             description = """
         푸드렌즈 API를 통해 분석된 음식 데이터를 받아 저장합니다.
 
-        - `mealTime`: BREAKFAST(아침), LUNCH(점심), DINNER(저녁), SNACK(간식) 등 (enum)
-        - `imageUrl`: 사용자 업로드 이미지의 URL
-        - `foods`: 사용자가 섭취한 음식 리스트
-            - `name`: 음식 이름 (예: White Rice)
-            - `eatAmount`: 섭취량 (1.0 = 1인분 기준)
-            - `nutrition`: 영양소 정보
-                - `energy`: 칼로리 (kcal)
-                - `carbohydrate`: 탄수화물 (g)
-                - `protein`: 단백질 (g)
-                - `fat`: 지방 (g)
-                - `vitaminA`, `vitaminC`, `calcium`: 기타 영양소 (선택 입력 가능)
+        필드 설명:
+        - `mealType`: BREAKFAST(아침), LUNCH(점심), DINNER(저녁), SNACK(간식) 중 선택 (Enum)
+        - `image`: 사용자가 업로드한 음식 사진 (Multipart 형식)
+        - `request`: 음식 데이터 본문 (JSON)
+            - `foods`: 사용자가 섭취한 음식 리스트
+                - `name`: 음식 이름 (예: White Rice)
+                - `fullName`: 전체 이름 또는 상세 정보
+                - `eatAmount`: 섭취량 (1.0 = 1인분 기준)
+                - `nutrition`: 영양소 정보
+                    - `energy`: 에너지 (kcal)
+                    - `carbohydrate`: 탄수화물 (g)
+                    - `protein`: 단백질 (g)
+                    - `fat`: 지방 (g)
+                    - `saturatedFattyAcid`: 포화지방산 (g)
+                    - `transFattyAcid`: 트랜스지방산 (g)
+                    - `cholesterol`: 콜레스테롤 (mg)
+                    - `totalSugars`: 당류 (g)
+                    - `totalDietaryFiber`: 식이섬유 (g)
+                    - `sodium`: 나트륨 (mg)
+                    - `calcium`: 칼슘 (mg)
+                    - `vitaminA`: 비타민 A (μg RE)
+                    - `vitaminC`: 비타민 C (mg)
+                    - `vitaminD`: 비타민 D (μg)
+                    - `vitaminE`: 비타민 E (mg α-TE)
+                    - `vitaminB6`: 비타민 B6 (mg)
 
-         주의:
-        - `eatAmount`는 사용자가 선택한 섭취량(1인분 기준 비율)
-        - 누락된 영양소는 null 허용 (예: 비타민A 정보가 없을 경우 생략)
-        - 추후 입력 받을 영양소의 경우 조율 예정
+        주의사항:
+        - `eatAmount`는 사용자가 선택한 섭취 비율이며, 1.0 = 1인분입니다.
+        - 모든 영양소는 nullable이며, 누락된 정보는 생략해도 됩니다.
+        - 이후 입력 항목은 유동적으로 변경될 수 있습니다.
     """
     ) @PostMapping(value = "/meals", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<SingleResponse<Long>> registerMeal(
@@ -72,7 +86,7 @@ public class MealController {
     }
 
     @Operation(summary = "하루 중 특정 식사 기록 조회", description = "아침, 점심, 저녁, 간식 중 선택한 식사의 기록을 조회합니다.")
-    @GetMapping("/meals/{mealTime}")
+    @GetMapping("/meals/{mealType}")
     public ResponseEntity<SingleResponse<DailyMealRecordResponseDto.MealRecordDto>> getMealByTime(
             @Parameter(description = "조회할 날짜", example = "2025-04-04")
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
@@ -91,6 +105,18 @@ public class MealController {
     ) {
         DailyNutritionSummaryResponseDto summary = mealRecordService.getDailyNutritionSummary(date);
         return ResponseEntity.ok(new SingleResponse<>(200, "하루 영양소 총합 조회 성공", summary));
+    }
+
+    @Operation(summary = "특정 음식 삭제", description = "특정 날짜, 식사 종류, 음식 이름으로 해당 음식 1개를 삭제합니다.")
+    @DeleteMapping("/meals")
+    public ResponseEntity<SingleResponse<String>> deleteMealFood(
+            @Parameter(description = "조회할 날짜", example = "2025-04-05")
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam MealType mealType,
+            @RequestParam String foodName) {
+
+        mealRecordService.deleteMealFood(date, mealType, foodName);
+        return ResponseEntity.ok(new SingleResponse<>(200, "음식 삭제 완료", foodName));
     }
 
 }

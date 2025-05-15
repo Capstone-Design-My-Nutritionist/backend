@@ -35,7 +35,6 @@ public class MealRecord extends BaseTimeEntity {
         this.user = user;
     }
 
-    // MealRecord.java
     public void addMealImage(MealImage image) {
         this.mealImages.add(image);
         image.setMealRecord(this);

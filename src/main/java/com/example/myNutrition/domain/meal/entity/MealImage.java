@@ -41,4 +41,9 @@ public class MealImage {
     public void setMealRecord(MealRecord mealRecord) {
         this.mealRecord = mealRecord;
     }
+
+    public void removeMealFood(MealFood food) {
+        this.mealFoods.remove(food);
+        food.setMealImage(null); // 연관관계 끊기
+    }
 }

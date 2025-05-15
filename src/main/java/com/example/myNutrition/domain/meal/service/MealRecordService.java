@@ -207,4 +207,30 @@ public class MealRecordService {
         Double val = getter.apply(detail);
         return val != null ? val : 0.0;
     }
+
+    @Transactional
+    public void deleteMealFood(LocalDate date, MealType mealType, String foodName) {
+        Long userId = SecurityUtils.getCurrentUserId();
+
+        List<MealRecord> records = mealRecordRepository.findAllByUserIdAndDate(userId, date);
+
+        for (MealRecord record : records) {
+            if (!record.getMealType().equals(mealType)) continue;
+
+            for (MealImage image : record.getMealImages()) {
+                // 삭제 대상 음식 필터링
+                List<MealFood> toRemove = image.getMealFoods().stream()
+                        .filter(f -> f.getName().equals(foodName))
+                        .toList();
+
+                if (!toRemove.isEmpty()) {
+                    toRemove.forEach(image::removeMealFood); // 리스트에서 제거 + 연관관계 끊기
+                }
+            }
+        }
+
+        // 삭제된 항목 반영을 위해 저장
+        mealRecordRepository.saveAll(records);
+    }
+
 }
