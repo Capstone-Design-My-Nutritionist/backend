@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class MealFoodRegisterRequestDto {
     private MealType mealType;
-    private String imageUrl;
+    //private String imageUrl;
     private List<MealFoodDto> foods;
 
     @Getter
