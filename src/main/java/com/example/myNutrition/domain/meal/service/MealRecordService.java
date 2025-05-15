@@ -4,6 +4,7 @@ import com.example.myNutrition.common.security.util.SecurityUtils;
 import com.example.myNutrition.domain.meal.dto.request.MealFoodRegisterRequestDto;
 import com.example.myNutrition.domain.meal.dto.response.DailyMealRecordResponseDto;
 import com.example.myNutrition.domain.meal.dto.response.DailyNutritionSummaryResponseDto;
+import com.example.myNutrition.domain.meal.dto.response.NutritionSummaryDto;
 import com.example.myNutrition.domain.meal.entity.*;
 import com.example.myNutrition.domain.meal.repository.MealRecordRepository;
 import com.example.myNutrition.domain.user.entity.User;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +48,7 @@ public class MealRecordService {
 
         // MealFood + NutritionDetail 생성 후 연결
         for (MealFoodRegisterRequestDto.MealFoodDto foodDto : request.getFoods()) {
-            NutritionDetail nutrition = createNutritionDetail(foodDto.getNutrition());
+            NutritionDetail nutrition = NutritionDetail.from(foodDto.getNutrition());
 
             MealFood mealFood = MealFood.builder()
                     .name(foodDto.getName())
@@ -63,17 +65,6 @@ public class MealRecordService {
         return mealRecord.getId();
     }
 
-    private NutritionDetail createNutritionDetail(MealFoodRegisterRequestDto.MealFoodDto.NutritionDetailDto dto) {
-        return NutritionDetail.builder()
-                .energy(dto.getEnergy())
-                .carbohydrate(dto.getCarbohydrate())
-                .protein(dto.getProtein())
-                .fat(dto.getFat())
-                .vitaminA(dto.getVitaminA())
-                .vitaminC(dto.getVitaminC())
-                .calcium(dto.getCalcium())
-                .build();
-    }
 
     @Transactional(readOnly = true)
     public DailyMealRecordResponseDto getDailyMealRecords(LocalDate date) {
@@ -88,14 +79,9 @@ public class MealRecordService {
                             .name(food.getName())
                             .imageUrl(food.getMealImage().getImageUrl())
                             .amount(food.getAmount())
-                            .nutrition(DailyMealRecordResponseDto.MealRecordDto.MealFoodDto.NutritionSummaryDto.builder()
-                                    .energy(safeValue(food.getNutritionDetail(), NutritionDetail::getEnergy))
-                                    .carbohydrate(safeValue(food.getNutritionDetail(), NutritionDetail::getCarbohydrate))
-                                    .protein(safeValue(food.getNutritionDetail(), NutritionDetail::getProtein))
-                                    .fat(safeValue(food.getNutritionDetail(), NutritionDetail::getFat))
-                                    .build())
+                            .nutrition(NutritionSummaryDto.from(food.getNutritionDetail()))
                             .build())
-                    .toList();
+                    .collect(Collectors.toList());
 
             return DailyMealRecordResponseDto.MealRecordDto.builder()
                     .mealTime(record.getMealTime())
@@ -125,14 +111,9 @@ public class MealRecordService {
                         .name(food.getName())
                         .imageUrl(food.getMealImage().getImageUrl())
                         .amount(food.getAmount())
-                        .nutrition(DailyMealRecordResponseDto.MealRecordDto.MealFoodDto.NutritionSummaryDto.builder()
-                                .energy(safeValue(food.getNutritionDetail(), NutritionDetail::getEnergy))
-                                .carbohydrate(safeValue(food.getNutritionDetail(), NutritionDetail::getCarbohydrate))
-                                .protein(safeValue(food.getNutritionDetail(), NutritionDetail::getProtein))
-                                .fat(safeValue(food.getNutritionDetail(), NutritionDetail::getFat))
-                                .build())
+                        .nutrition(NutritionSummaryDto.from(food.getNutritionDetail()))
                         .build())
-                .toList();
+                .collect(Collectors.toList());
 
         return DailyMealRecordResponseDto.MealRecordDto.builder()
                 .mealTime(mealTime)
@@ -149,40 +130,68 @@ public class MealRecordService {
 
         List<MealRecord> records = mealRecordRepository.findAllByUserIdAndCreatedAtBetween(userId, start, end);
 
+        // 누적값 초기화
         double totalEnergy = 0.0;
-        double totalCarb = 0.0;
+        double totalCarbohydrate = 0.0;
         double totalProtein = 0.0;
         double totalFat = 0.0;
+        double totalSaturatedFat = 0.0;
+        double totalTransFat = 0.0;
+        double totalCholesterol = 0.0;
+        double totalSugars = 0.0;
+        double totalDietaryFiber = 0.0;
+        double totalSodium = 0.0;
         double totalCalcium = 0.0;
         double totalVitaminA = 0.0;
         double totalVitaminC = 0.0;
+        double totalVitaminD = 0.0;
+        double totalVitaminE = 0.0;
+        double totalVitaminB6 = 0.0;
 
         for (MealRecord record : records) {
             for (MealImage image : record.getMealImages()) {
                 for (MealFood food : image.getMealFoods()) {
                     NutritionDetail detail = food.getNutritionDetail();
 
-                    totalEnergy += safeValue(detail, NutritionDetail::getEnergy);
-                    totalCarb += safeValue(detail, NutritionDetail::getCarbohydrate);
-                    totalProtein += safeValue(detail, NutritionDetail::getProtein);
-                    totalFat += safeValue(detail, NutritionDetail::getFat);
-                    totalCalcium += safeValue(detail, NutritionDetail::getCalcium);
-                    totalVitaminA += safeValue(detail, NutritionDetail::getVitaminA);
-                    totalVitaminC += safeValue(detail, NutritionDetail::getVitaminC);
+                    totalEnergy           += safeValue(detail, NutritionDetail::getEnergy);
+                    totalCarbohydrate     += safeValue(detail, NutritionDetail::getCarbohydrate);
+                    totalProtein          += safeValue(detail, NutritionDetail::getProtein);
+                    totalFat              += safeValue(detail, NutritionDetail::getFat);
+                    totalSaturatedFat     += safeValue(detail, NutritionDetail::getSaturatedFat);
+                    totalTransFat         += safeValue(detail, NutritionDetail::getTransFat);
+                    totalCholesterol      += safeValue(detail, NutritionDetail::getCholesterol);
+                    totalSugars           += safeValue(detail, NutritionDetail::getSugar);
+                    totalDietaryFiber     += safeValue(detail, NutritionDetail::getDietaryFiber);
+                    totalSodium           += safeValue(detail, NutritionDetail::getSodium);
+                    totalCalcium          += safeValue(detail, NutritionDetail::getCalcium);
+                    totalVitaminA         += safeValue(detail, NutritionDetail::getVitaminA);
+                    totalVitaminC         += safeValue(detail, NutritionDetail::getVitaminC);
+                    totalVitaminD         += safeValue(detail, NutritionDetail::getVitaminD);
+                    totalVitaminE         += safeValue(detail, NutritionDetail::getVitaminE);
+                    totalVitaminB6        += safeValue(detail, NutritionDetail::getVitaminB);
                 }
             }
         }
 
-        return DailyNutritionSummaryResponseDto.builder()
-                .date(date)
-                .totalEnergy(totalEnergy)
-                .totalCarbohydrate(totalCarb)
-                .totalProtein(totalProtein)
-                .totalFat(totalFat)
-                .totalCalcium(totalCalcium)
-                .totalVitaminA(totalVitaminA)
-                .totalVitaminC(totalVitaminC)
-                .build();
+        return DailyNutritionSummaryResponseDto.from(
+                date,
+                totalEnergy,
+                totalCarbohydrate,
+                totalProtein,
+                totalFat,
+                totalSaturatedFat,
+                totalTransFat,
+                totalCholesterol,
+                totalSugars,
+                totalDietaryFiber,
+                totalSodium,
+                totalCalcium,
+                totalVitaminA,
+                totalVitaminC,
+                totalVitaminD,
+                totalVitaminE,
+                totalVitaminB6
+        );
     }
 
     /***
