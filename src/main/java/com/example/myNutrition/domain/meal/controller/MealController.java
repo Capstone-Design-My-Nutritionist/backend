@@ -55,8 +55,7 @@ public class MealController {
             @RequestPart("image") MultipartFile imageFile
     ) {
         String imageUrl = s3Service.uploadImage(imageFile);
-        request.setImageUrl(imageUrl); // setter 또는 빌더 패턴 필요
-        Long mealRecordId = mealRecordService.registerMealRecord(request);
+        Long mealRecordId = mealRecordService.registerMealRecord(request, imageUrl);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new SingleResponse<>(201, "음식 기록 등록 완료", mealRecordId));
     }

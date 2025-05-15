@@ -29,7 +29,7 @@ public class MealRecordService {
     private final MealRecordRepository mealRecordRepository;
 
     @Transactional
-    public Long registerMealRecord(MealFoodRegisterRequestDto request) {
+    public Long registerMealRecord(MealFoodRegisterRequestDto request, String imageUrl) {
         Long userId = SecurityUtils.getCurrentUserId();
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
@@ -42,7 +42,7 @@ public class MealRecordService {
 
         // MealImage 생성
         MealImage image = MealImage.builder()
-                .imageUrl(request.getImageUrl())
+                .imageUrl(imageUrl)
                 .mealRecord(mealRecord)
                 .build();
 

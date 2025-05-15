@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class MealFoodRegisterRequestDto {
     private MealType mealType;
-    private String imageUrl;
+    //private String imageUrl;
     private List<MealFoodDto> foods;
 
     @Getter
@@ -45,8 +45,5 @@ public class MealFoodRegisterRequestDto {
             private Double vitaminE;             // 비타민E(mg α-TE)
             private Double vitaminB6;            // 비타민B6(mg)
         }
-    }
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 }
