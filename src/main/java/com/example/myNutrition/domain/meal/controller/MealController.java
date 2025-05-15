@@ -72,7 +72,7 @@ public class MealController {
     }
 
     @Operation(summary = "하루 중 특정 식사 기록 조회", description = "아침, 점심, 저녁, 간식 중 선택한 식사의 기록을 조회합니다.")
-    @GetMapping("/meals/{mealTime}")
+    @GetMapping("/meals/{mealType}")
     public ResponseEntity<SingleResponse<DailyMealRecordResponseDto.MealRecordDto>> getMealByTime(
             @Parameter(description = "조회할 날짜", example = "2025-04-04")
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
@@ -91,6 +91,18 @@ public class MealController {
     ) {
         DailyNutritionSummaryResponseDto summary = mealRecordService.getDailyNutritionSummary(date);
         return ResponseEntity.ok(new SingleResponse<>(200, "하루 영양소 총합 조회 성공", summary));
+    }
+
+    @Operation(summary = "특정 음식 삭제", description = "특정 날짜, 식사 종류, 음식 이름으로 해당 음식 1개를 삭제합니다.")
+    @DeleteMapping("/meals")
+    public ResponseEntity<SingleResponse<String>> deleteMealFood(
+            @Parameter(description = "조회할 날짜", example = "2025-04-05")
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam MealType mealType,
+            @RequestParam String foodName) {
+
+        mealRecordService.deleteMealFood(date, mealType, foodName);
+        return ResponseEntity.ok(new SingleResponse<>(200, "음식 삭제 완료", foodName));
     }
 
 }
