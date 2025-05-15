@@ -46,4 +46,7 @@ public class MealFoodRegisterRequestDto {
             private Double vitaminB6;            // 비타민B6(mg)
         }
     }
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }

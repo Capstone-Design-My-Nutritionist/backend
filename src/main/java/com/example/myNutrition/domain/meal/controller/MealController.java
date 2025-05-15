@@ -6,14 +6,17 @@ import com.example.myNutrition.domain.meal.dto.response.DailyMealRecordResponseD
 import com.example.myNutrition.domain.meal.dto.response.DailyNutritionSummaryResponseDto;
 import com.example.myNutrition.domain.meal.entity.MealType;
 import com.example.myNutrition.domain.meal.service.MealRecordService;
+import com.example.myNutrition.infra.s3.S3Service;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -22,6 +25,7 @@ import java.time.LocalDate;
 public class MealController {
 
     private final MealRecordService mealRecordService;
+    private final S3Service s3Service;
 
     @Operation(
             summary = "음식 사진 기반 식사 기록 저장",
@@ -45,10 +49,13 @@ public class MealController {
         - 누락된 영양소는 null 허용 (예: 비타민A 정보가 없을 경우 생략)
         - 추후 입력 받을 영양소의 경우 조율 예정
     """
-    ) @PostMapping("/meals")
+    ) @PostMapping(value = "/meals", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<SingleResponse<Long>> registerMeal(
-            @Valid @RequestBody MealFoodRegisterRequestDto request
+            @RequestPart("request") @Valid MealFoodRegisterRequestDto request,
+            @RequestPart("image") MultipartFile imageFile
     ) {
+        String imageUrl = s3Service.uploadImage(imageFile);
+        request.setImageUrl(imageUrl); // setter 또는 빌더 패턴 필요
         Long mealRecordId = mealRecordService.registerMealRecord(request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new SingleResponse<>(201, "음식 기록 등록 완료", mealRecordId));
