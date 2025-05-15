@@ -4,7 +4,7 @@ import com.example.myNutrition.common.response.SingleResponse;
 import com.example.myNutrition.domain.meal.dto.request.MealFoodRegisterRequestDto;
 import com.example.myNutrition.domain.meal.dto.response.DailyMealRecordResponseDto;
 import com.example.myNutrition.domain.meal.dto.response.DailyNutritionSummaryResponseDto;
-import com.example.myNutrition.domain.meal.entity.MealTime;
+import com.example.myNutrition.domain.meal.entity.MealType;
 import com.example.myNutrition.domain.meal.service.MealRecordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -71,10 +71,10 @@ public class MealController {
             @Parameter(description = "조회할 날짜", example = "2025-04-04")
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @Parameter(description = "식사 시간 (BREAKFAST, LUNCH, DINNER, SNACK)", example = "LUNCH")
-            @PathVariable MealTime mealTime
+            @PathVariable MealType mealType
     ) {
-        DailyMealRecordResponseDto.MealRecordDto result = mealRecordService.getMealRecordByTime(date, mealTime);
-        return ResponseEntity.ok(new SingleResponse<>(200, mealTime.getDisplayName() + " 식사 조회 완료", result));
+        DailyMealRecordResponseDto.MealRecordDto result = mealRecordService.getMealRecordByTime(date, mealType);
+        return ResponseEntity.ok(new SingleResponse<>(200, mealType.getDisplayName() + " 식사 조회 완료", result));
     }
 
     @Operation(summary = "하루 영양소 총합 조회", description = "사용자가 하루 동안 섭취한 총 영양소 정보를 조회합니다.")
