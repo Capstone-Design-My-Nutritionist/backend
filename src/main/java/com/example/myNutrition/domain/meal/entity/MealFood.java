@@ -18,6 +18,7 @@ public class MealFood {
     private Long id;
 
     private String name; // 음식 이름
+    private String fullName; // 음식 이름
     private Double amount; // g 또는 ml
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -28,8 +29,9 @@ public class MealFood {
     private NutritionDetail nutritionDetail;
 
     @Builder
-    public MealFood(String name, double amount, MealImage mealImage, NutritionDetail nutritionDetail) {
+    public MealFood(String name,String fullName, double amount, MealImage mealImage, NutritionDetail nutritionDetail) {
         this.name = name;
+        this.fullName = fullName;
         this.amount = amount;
         this.mealImage = mealImage;
         this.nutritionDetail = nutritionDetail;

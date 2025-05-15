@@ -21,7 +21,7 @@ public class MealRecord extends BaseTimeEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private MealTime mealTime;
+    private MealType mealType;
 
     @OneToMany(mappedBy = "mealRecord", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MealImage> mealImages = new ArrayList<>();
@@ -30,8 +30,8 @@ public class MealRecord extends BaseTimeEntity {
     private User user;
 
     @Builder
-    public MealRecord(MealTime mealTime, User user) {
-        this.mealTime = mealTime;
+    public MealRecord(MealType mealType, User user) {
+        this.mealType = mealType;
         this.user = user;
     }
 

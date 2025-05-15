@@ -1,5 +1,6 @@
 package com.example.myNutrition.domain.meal.entity;
 
+import com.example.myNutrition.domain.meal.dto.request.MealFoodRegisterRequestDto;
 import com.example.myNutrition.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -22,39 +23,61 @@ public class NutritionDetail {
     private Double carbohydrate;
     private Double protein;
     private Double fat;
+    private Double saturatedFat;   // 포화지방산
+    private Double transFat;       // 트랜스지방산
     private Double cholesterol;
-    private Double dietaryFiber;
-    private Double calcium;
-    private Double saturatedFat;
-    private Double sodium;
     private Double sugar;
-    private Double transFat;
+    private Double dietaryFiber;
+    private Double sodium;
+    private Double calcium;
     private Double vitaminA;
-    private Double vitaminB;
     private Double vitaminC;
     private Double vitaminD;
     private Double vitaminE;
+    private Double vitaminB;       // vitaminB6를 vitaminB로 저장할 경우
 
     @Builder
     public NutritionDetail(Double energy, Double carbohydrate, Double protein, Double fat,
-                           Double cholesterol, Double dietaryFiber, Double calcium, Double saturatedFat,
-                           Double sodium, Double sugar, Double transFat, Double vitaminA, Double vitaminB,
-                           Double vitaminC, Double vitaminD, Double vitaminE) {
+                           Double saturatedFat, Double transFat, Double cholesterol,
+                           Double sugar, Double dietaryFiber, Double sodium, Double calcium,
+                           Double vitaminA, Double vitaminC, Double vitaminD, Double vitaminE,
+                           Double vitaminB) {
         this.energy = energy;
         this.carbohydrate = carbohydrate;
         this.protein = protein;
         this.fat = fat;
-        this.cholesterol = cholesterol;
-        this.dietaryFiber = dietaryFiber;
-        this.calcium = calcium;
         this.saturatedFat = saturatedFat;
-        this.sodium = sodium;
-        this.sugar = sugar;
         this.transFat = transFat;
+        this.cholesterol = cholesterol;
+        this.sugar = sugar;
+        this.dietaryFiber = dietaryFiber;
+        this.sodium = sodium;
+        this.calcium = calcium;
         this.vitaminA = vitaminA;
-        this.vitaminB = vitaminB;
         this.vitaminC = vitaminC;
         this.vitaminD = vitaminD;
         this.vitaminE = vitaminE;
+        this.vitaminB = vitaminB;
+    }
+
+    public static NutritionDetail from(MealFoodRegisterRequestDto.MealFoodDto.NutritionDetailDto dto) {
+        return NutritionDetail.builder()
+                .energy(dto.getEnergy())
+                .carbohydrate(dto.getCarbohydrate())
+                .protein(dto.getProtein())
+                .fat(dto.getFat())
+                .saturatedFat(dto.getSaturatedFattyAcid())
+                .transFat(dto.getTransFattyAcid())
+                .cholesterol(dto.getCholesterol())
+                .sugar(dto.getTotalSugars())
+                .dietaryFiber(dto.getTotalDietaryFiber())
+                .sodium(dto.getSodium())
+                .calcium(dto.getCalcium())
+                .vitaminA(dto.getVitaminA())
+                .vitaminC(dto.getVitaminC())
+                .vitaminD(dto.getVitaminD())
+                .vitaminE(dto.getVitaminE())
+                .vitaminB(dto.getVitaminB6())
+                .build();
     }
 }
