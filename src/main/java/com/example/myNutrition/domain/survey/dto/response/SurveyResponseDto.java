@@ -36,6 +36,7 @@ public class SurveyResponseDto {
     private List<Allergy> allergies;
     private List<HealthConcern> concerns;
     private List<HealthGoal> healthGoals;
+    private double tdee;
 
     public static SurveyResponseDto from(Survey survey) {
         return new SurveyResponseDto(
@@ -62,7 +63,8 @@ public class SurveyResponseDto {
                 survey.getFamilyHistories().stream().map(SurveyFamilyHistory::getDisease).toList(),
                 survey.getAllergies().stream().map(SurveyAllergy::getAllergy).toList(),
                 survey.getConcerns().stream().map(SurveyConcern::getConcern).toList(),
-                survey.getHealthGoals().stream().map(SurveyHealthGoal::getGoal).toList()
+                survey.getHealthGoals().stream().map(SurveyHealthGoal::getGoal).toList(),
+                survey.calculateTDEE()
         );
     }
 }

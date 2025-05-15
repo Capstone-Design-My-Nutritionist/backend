@@ -159,4 +159,26 @@ public class Survey {
         this.completed = true;
     }
 
+    public double calculateTDEE() {
+        double bmr;
+
+        // BMR 계산 (Mifflin-St Jeor 공식)
+        if (this.gender == Gender.MALE) {
+            bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+        } else {
+            bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+        }
+
+        // 활동 지수 (ExerciseFrequency에 따라 조절)
+        double activityFactor = switch (this.exerciseFrequency) {
+            case NONE -> 1.2;
+            case LIGHT_1_3 -> 1.375;
+            case MODERATE_3_5 -> 1.55;
+            case INTENSE_6_7 -> 1.725;
+            case DAILY_ACTIVE -> 1.9;
+        };
+
+        return bmr * activityFactor;
+    }
+
 }
