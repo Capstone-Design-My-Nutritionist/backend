@@ -52,6 +52,7 @@ public class MealRecordService {
 
             MealFood mealFood = MealFood.builder()
                     .name(foodDto.getName())
+                    .fullName(foodDto.getFullName())
                     .amount(foodDto.getEatAmount())
                     .mealImage(image)
                     .nutritionDetail(nutrition)
@@ -77,6 +78,7 @@ public class MealRecordService {
                     .flatMap(image -> image.getMealFoods().stream())
                     .map(food -> DailyMealRecordResponseDto.MealRecordDto.MealFoodDto.builder()
                             .name(food.getName())
+                            .fullName(food.getFullName())
                             .imageUrl(food.getMealImage().getImageUrl())
                             .amount(food.getAmount())
                             .nutrition(NutritionSummaryDto.from(food.getNutritionDetail()))
@@ -109,6 +111,7 @@ public class MealRecordService {
                 .flatMap(image -> image.getMealFoods().stream())
                 .map(food -> DailyMealRecordResponseDto.MealRecordDto.MealFoodDto.builder()
                         .name(food.getName())
+                        .fullName(food.getFullName())
                         .imageUrl(food.getMealImage().getImageUrl())
                         .amount(food.getAmount())
                         .nutrition(NutritionSummaryDto.from(food.getNutritionDetail()))

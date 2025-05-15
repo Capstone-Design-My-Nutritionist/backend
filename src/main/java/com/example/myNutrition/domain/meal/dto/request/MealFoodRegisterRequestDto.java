@@ -20,6 +20,7 @@ public class MealFoodRegisterRequestDto {
     @AllArgsConstructor
     public static class MealFoodDto {
         private String name;
+        private String fullName;
         private double eatAmount;
         private NutritionDetailDto nutrition;
 

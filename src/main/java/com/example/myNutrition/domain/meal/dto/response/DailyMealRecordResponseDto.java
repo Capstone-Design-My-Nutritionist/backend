@@ -27,6 +27,7 @@ public class DailyMealRecordResponseDto {
         @AllArgsConstructor
         public static class MealFoodDto {
             private String name;
+            private String fullName;
             private String imageUrl;
             private Double amount;
             private NutritionSummaryDto nutrition;
