@@ -47,7 +47,11 @@ public class SwaggerConfig {
                 .info(info)
                 .security(List.of(securityRequirement))
                 .components(new Components().addSecuritySchemes("JWT", securityScheme))
-                .servers(List.of(new Server().url(swaggerBaseUrl).description("Active Profile Server")));
+                .servers(List.of(
+                        new Server().url(swaggerBaseUrl).description("Active Profile Server"), //prod server
+                        new Server().url("http://localhost:8080").description("Local Server") // Local Server
+
+                ));
     }
 
 
