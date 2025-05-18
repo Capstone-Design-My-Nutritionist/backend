@@ -99,7 +99,8 @@ public class SecurityConfig {
                 "http://localhost:8080",
                 "http://ec2-43-200-29-41.ap-northeast-2.compute.amazonaws.com",
                 "http://nutri-ai.shop",
-                "https://nutri-ai.shop"
+                "https://nutri-ai.shop",
+                "http://13.209.65.98 "
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
         config.setAllowedHeaders(List.of(
