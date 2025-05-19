@@ -21,6 +21,7 @@ public class MealRecord extends BaseTimeEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private MealType mealType;
 
     @OneToMany(mappedBy = "mealRecord", cascade = CascadeType.ALL, orphanRemoval = true)
