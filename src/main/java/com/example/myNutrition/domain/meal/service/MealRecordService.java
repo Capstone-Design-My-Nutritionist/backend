@@ -6,11 +6,13 @@ import com.example.myNutrition.domain.meal.dto.response.DailyMealRecordResponseD
 import com.example.myNutrition.domain.meal.dto.response.DailyNutritionSummaryResponseDto;
 import com.example.myNutrition.domain.meal.dto.response.NutritionSummaryDto;
 import com.example.myNutrition.domain.meal.entity.*;
+import com.example.myNutrition.domain.meal.exception.MealTypeNullException;
 import com.example.myNutrition.domain.meal.repository.MealRecordRepository;
 import com.example.myNutrition.domain.user.entity.User;
 import com.example.myNutrition.domain.user.exception.UserNotFoundException;
 import com.example.myNutrition.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MealRecordService {
 
@@ -215,6 +218,10 @@ public class MealRecordService {
         List<MealRecord> records = mealRecordRepository.findAllByUserIdAndDate(userId, date);
 
         for (MealRecord record : records) {
+            if (record.getMealType() == null) {
+                log.warn("MealType is null for record id={}", record.getId());
+                throw new MealTypeNullException("MealType is null. 데이터 정합성 확인 필요.");
+            }
             if (!record.getMealType().equals(mealType)) continue;
 
             for (MealImage image : record.getMealImages()) {
