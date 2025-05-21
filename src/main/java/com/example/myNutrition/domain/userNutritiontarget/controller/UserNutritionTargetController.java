@@ -19,7 +19,7 @@ public class UserNutritionTargetController {
     private final UserNutritionTargetService userNutritionTargetService;
 
     @Operation(summary = "유저의 일일 영양소 목표값 조회")
-    @GetMapping()
+    @GetMapping("/user-nutrition-target")
     public ResponseEntity<SingleResponse<UserNutritionTargetResponseDto>> getUserNutritionTarget() {
         UserNutritionTargetResponseDto response = userNutritionTargetService.getTargetForCurrentUser();
         return ResponseEntity.ok(new SingleResponse<>(200, "사용자 영양소 할당량 조회 성공", response));
