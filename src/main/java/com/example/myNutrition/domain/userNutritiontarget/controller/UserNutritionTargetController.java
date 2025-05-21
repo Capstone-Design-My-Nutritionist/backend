@@ -12,14 +12,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/")
+@RestController("/user-nutrition-target")
 @RequiredArgsConstructor
 public class UserNutritionTargetController {
 
     private final UserNutritionTargetService userNutritionTargetService;
 
     @Operation(summary = "유저의 일일 영양소 목표값 조회")
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<SingleResponse<UserNutritionTargetResponseDto>> getUserNutritionTarget() {
         UserNutritionTargetResponseDto response = userNutritionTargetService.getTargetForCurrentUser();
         return ResponseEntity.ok(new SingleResponse<>(200, "사용자 영양소 할당량 조회 성공", response));
