@@ -68,4 +68,5 @@ jobs:
            docker pull gisu1102/my-nutrition:latest
            docker pull gisu1102/my-nutrition-nginx:latest
            docker compose -f docker-compose.prod.yml down
+           docker system prune -af
            docker compose -f docker-compose.prod.yml up -d
